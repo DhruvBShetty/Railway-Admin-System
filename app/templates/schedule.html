@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+
+{%block app_content%}
+
+<br>
+<button type="button" class="btn btn-outline-secondary"><a href="{{url_for('Createschedule')}}">Create Schedule</a></button>
+<br>
+<br>
+<h2><i>View Schedule</i></h2>
+
+
+{% include '_display.html' %}
+
+
+
+
+{%endblock%}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
+{% endblock %}
+     

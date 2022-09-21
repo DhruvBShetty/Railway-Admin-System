@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+
+{%block app_content%}
+
+<button type="button" class="btn btn-outline-secondary"><a href="{{url_for('Createtrain')}}">Create Train</a></button>
+
+<h2><i>View Trains</i></h2>
+
+{% include '_display.html' %}
+
+{%endblock%}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
+{% endblock %}
+
+

@@ -1,0 +1,30 @@
+
+
+<table id="data" class="table table-striped">
+<thead>
+<tr>
+{% for field in form if field.widget.input_type != 'hidden' and field.id!='submit'%}
+<th>{{ field.label }}</th>
+{% endfor %}
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+{% for entry in query%}
+<tr>
+{% for cell in entry%}
+<td id="{{loop.index}}">{{cell}}</td>
+
+{%endfor%}
+
+<td><a href="{{request.url}}/{{entry[0]}}"><i class="fas fa-edit"></i></a>
+    <a href ="{{request.url}}/{{entry[0]}}" data-method="delete" class="jquery-postback"><i class="fas fa-trash"></i></a>
+</td>
+
+</tr>
+{%endfor%}
+</tbody>
+</table>
+
+
+

@@ -1,0 +1,9 @@
+
+<form action="" method="post">
+    {{ form.csrf_token }}
+    {% for field in form if field.widget.input_type != 'hidden' %}
+        {{ field.label }}
+        {{ field }}
+      <br>
+    {% endfor %}
+</form>

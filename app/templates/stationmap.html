@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+
+{%block app_content%}
+
+<h1>Station locations on map</h1>
+<div id="map"></div>
+
+{%endblock%}
+
+{% block scripts %}
+<script id="myscript">
+  var mapvalues=JSON.parse('{{query|tojson}}');
+  var southWest = L.latLng(6.4626999, 68.1097),
+    northEast =  L.latLng(35.513327, 97.39535869999999),
+    bounds = L.latLngBounds(southWest, northEast);
+  var map = L.map('map',{maxBounds:bounds}).setView([28.913427000000002,79.519746],6);
+  var shelterMarkers = new L.FeatureGroup();
+  console.log(southWest.lat,southWest.lng)
+  for(var i=0;i<mapvalues.length;i++){
+      const myval=mapvalues[i][1];
+      mymarker=L.marker(JSON.parse(mapvalues[i][5])).on("click",function(e){
+      var popLocation= e.latlng;
+      var element=document.getElementById("myrep");
+      if(typeof(element) != 'undefined' && element != null){
+          element.remove();
+      }
+      weathfetch(popLocation,myval);
+      var popup = L.popup({ maxWidth:"auto",minWidth:"auto",maxHeight:"auto"}).setLatLng(popLocation).setContent(`<p id="myrep" style="font-size:10px;"></p>`).openOn(map);
+     });
+     shelterMarkers.addLayer(mymarker);
+
+  }
+  
+  map.on('zoomend', function() {
+    if (map.getZoom() <11){
+            map.removeLayer(shelterMarkers);
+           
+    }
+    else {
+            map.addLayer(shelterMarkers);
+        }
+   });
+
+
+  function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+   
+
+   async function weathfetch(input,myval){
+    const myKey = "c8daae366e0e12d86b28c9341a24d211";
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${input.lat}&lon=${input.lng}&appid=${myKey}&units=metric`
+    );
+
+    const data = await response.json();
+    console.log(data);
+    const myvar=document.getElementById("myrep");
+    const myJSON = JSON.parse(JSON.stringify(data['main']));
+    const myweath=JSON.parse(JSON.stringify(data['weather'][0]));
+
+    console.log(myweath);
+    console.log(myJSON);
+  
+    
+    myvar.innerHTML=`        <div class="carousel-inner">
+                <div class="carousel-item active">
+
+            <h4 class="mb-1 sfw-normal">${myval}</h4>
+
+            
+              
+               <h6 class="display-6"><strong>${myJSON['temp']}°C</strong></h6>
+               <img src="http://openweathermap.org/img/wn/${myweath['icon']}@2x.png">
+               <p class="mb-0 me-4">${myweath['description']}</p>
+               
+            
+
+            
+            <p>Feels like: <strong>${myJSON['feels_like']}°C</strong></p>
+            <p>Max: <strong>${myJSON['temp_max']}°C</strong>, Min: <strong>${myJSON['temp_min']}°C</strong></p>
+
+
+
+          </div>
+        </div>`;
+   }
+
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    minZoom:6,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+</script>
+{% endblock %}

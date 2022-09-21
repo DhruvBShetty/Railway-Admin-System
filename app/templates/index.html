@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block app_content %}
+    <br>
+    <h1>Hi, Admin</h1>
+    <br>
+    <div>
+    <button type="button"><a href="{{url_for('schedule')}}">Schedule</a></button>
+    <button type="button"><a href="{{url_for('train')}}">Train</a></button>
+    <button type="button"><a href="{{url_for('station')}}">Station</a></button>
+    
+    </div>
+
+
+
+{% endblock %}

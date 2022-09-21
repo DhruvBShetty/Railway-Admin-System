@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{%block app_content%}
+
+<button type="button" class="btn btn-outline-secondary"><a href="{{url_for('Createstation')}}">Create Station</a></button>
+<button type="button" class="btn btn-outline-secondary"><a href="{{url_for('stationmap')}}">Station locations</a></button>
+
+<h2><i>View Stations<i></i></h2>
+
+{% include '_display.html' %}
+
+
+{%endblock%}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
+
+{% endblock %}
